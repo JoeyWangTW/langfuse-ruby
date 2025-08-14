@@ -48,7 +48,8 @@ require 'langfuse'
 client = Langfuse.new(
   public_key: "pk-lf-...",
   secret_key: "sk-lf-...",
-  host: "https://cloud.langfuse.com"  # Optional, defaults to cloud.langfuse.com
+  host: "https://cloud.langfuse.com",  # Optional, defaults to cloud.langfuse.com
+  environment: "production"            # Optional, defaults to 'default'
 )
 
 # Or configure globally
@@ -56,6 +57,7 @@ Langfuse.configure do |config|
   config.public_key = "pk-lf-..."
   config.secret_key = "sk-lf-..."
   config.host = "https://cloud.langfuse.com"
+  config.environment = "production"
 end
 
 client = Langfuse.new
@@ -347,6 +349,7 @@ export LANGFUSE_SECRET_KEY="sk-lf-..."
 export LANGFUSE_HOST="https://cloud.langfuse.com"
 export LANGFUSE_FLUSH_INTERVAL=5
 export LANGFUSE_AUTO_FLUSH=true
+export LANGFUSE_ENVIRONMENT=production
 ```
 
 ### Automatic Flush Control

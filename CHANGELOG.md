@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- Support configuring client environment during initialization and via `LANGFUSE_ENVIRONMENT` (defaults to `"default"`).
+
 ## [0.1.4] - 2025-07-29
 
 ### Added

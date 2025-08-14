@@ -39,6 +39,75 @@ RSpec.describe Langfuse::Client do
     end
   end
 
+  describe 'environment configuration' do
+    it 'defaults to "default" environment when not specified' do
+      client = Langfuse::Client.new(
+        public_key: 'test_key',
+        secret_key: 'test_secret'
+      )
+
+      expect(client.environment).to eq('default')
+    end
+
+    it 'initializes with provided environment' do
+      client = Langfuse::Client.new(
+        public_key: 'test_key',
+        secret_key: 'test_secret',
+        environment: 'dev'
+      )
+
+      expect(client.environment).to eq('dev')
+    end
+
+    it 'uses environment variable when parameter is missing' do
+      ENV['LANGFUSE_ENVIRONMENT'] = 'staging'
+
+      client = Langfuse::Client.new(
+        public_key: 'test_key',
+        secret_key: 'test_secret'
+      )
+
+      expect(client.environment).to eq('staging')
+
+      ENV.delete('LANGFUSE_ENVIRONMENT')
+    end
+
+    it 'parameter overrides environment variable' do
+      ENV['LANGFUSE_ENVIRONMENT'] = 'staging'
+
+      client = Langfuse::Client.new(
+        public_key: 'test_key',
+        secret_key: 'test_secret',
+        environment: 'dev'
+      )
+
+      expect(client.environment).to eq('dev')
+
+      ENV.delete('LANGFUSE_ENVIRONMENT')
+    end
+
+    it 'applies environment to traces by default' do
+      client = Langfuse::Client.new(
+        public_key: 'test_key',
+        secret_key: 'test_secret',
+        environment: 'dev'
+      )
+
+      trace = client.trace(name: 'test')
+      expect(trace.to_dict[:environment]).to eq('dev')
+    end
+
+    it 'uses default environment for traces when not provided' do
+      client = Langfuse::Client.new(
+        public_key: 'test_key',
+        secret_key: 'test_secret'
+      )
+
+      trace = client.trace(name: 'test')
+      expect(trace.to_dict[:environment]).to eq('default')
+    end
+  end
+
   describe '#span' do
     it 'creates a new span' do
       span = client.span(trace_id: 'test_trace_id', name: 'test_span')

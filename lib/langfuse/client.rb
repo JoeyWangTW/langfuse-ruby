@@ -7,10 +7,10 @@ require 'concurrent'
 
 module Langfuse
   class Client
-    attr_reader :public_key, :secret_key, :host, :debug, :timeout, :retries, :flush_interval, :auto_flush
+    attr_reader :public_key, :secret_key, :host, :debug, :timeout, :retries, :flush_interval, :auto_flush, :environment
 
     def initialize(public_key: nil, secret_key: nil, host: nil, debug: false, timeout: 30, retries: 3,
-                   flush_interval: nil, auto_flush: nil)
+                   flush_interval: nil, auto_flush: nil, environment: nil)
       @public_key = public_key || ENV['LANGFUSE_PUBLIC_KEY'] || Langfuse.configuration.public_key
       @secret_key = secret_key || ENV['LANGFUSE_SECRET_KEY'] || Langfuse.configuration.secret_key
       @host = host || ENV['LANGFUSE_HOST'] || Langfuse.configuration.host
@@ -23,6 +23,7 @@ module Langfuse
                     else
                       auto_flush
                     end
+      @environment = environment || ENV['LANGFUSE_ENVIRONMENT'] || Langfuse.configuration.environment
 
       raise AuthenticationError, 'Public key is required' unless @public_key
       raise AuthenticationError, 'Secret key is required' unless @secret_key
@@ -34,7 +35,7 @@ module Langfuse
 
     # Trace operations
     def trace(id: nil, name: nil, user_id: nil, session_id: nil, version: nil, release: nil,
-              input: nil, output: nil, metadata: nil, tags: nil, timestamp: nil, **kwargs)
+              input: nil, output: nil, metadata: nil, tags: nil, timestamp: nil, environment: nil, **kwargs)
       Trace.new(
         client: self,
         id: id || Utils.generate_id,
@@ -48,6 +49,7 @@ module Langfuse
         metadata: metadata,
         tags: tags,
         timestamp: timestamp || Utils.current_timestamp,
+        environment: environment || @environment,
         **kwargs
       )
     end

@@ -6,7 +6,8 @@ require 'langfuse'
 client = Langfuse.new(
   public_key: ENV['LANGFUSE_PUBLIC_KEY'],
   secret_key: ENV['LANGFUSE_SECRET_KEY'],
-  host: ENV['LANGFUSE_HOST'] || 'https://cloud.langfuse.com'
+  host: ENV['LANGFUSE_HOST'] || 'https://cloud.langfuse.com',
+  environment: ENV['LANGFUSE_ENVIRONMENT'] || 'development'
 )
 
 puts '🚀 Starting basic tracing example...'
@@ -19,7 +20,6 @@ trace = client.trace(
   user_id: 'user-123',
   session_id: 'session-456',
   input: { message: 'Hello, how are you?' },
-  environment: 'development',
   metadata: {
     version: '1.0.0'
   }
