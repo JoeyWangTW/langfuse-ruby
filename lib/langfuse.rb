@@ -31,7 +31,7 @@ module Langfuse
 
   # Configuration class for Langfuse client settings
   class Configuration
-    attr_accessor :public_key, :secret_key, :host, :debug, :timeout, :retries, :flush_interval, :auto_flush
+    attr_accessor :public_key, :secret_key, :host, :debug, :timeout, :retries, :flush_interval, :auto_flush, :environment
 
     def initialize
       @public_key = nil
@@ -42,6 +42,7 @@ module Langfuse
       @retries = 3
       @flush_interval = 5
       @auto_flush = true
+      @environment = 'default'
     end
   end
 end
